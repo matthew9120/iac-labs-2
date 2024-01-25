@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "github-actions" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "github-actions" ]
 
 permissions:
   contents: read
@@ -53,10 +53,6 @@ jobs:
   run:
   
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./example-app
 
     steps:
       - name: Run the application
