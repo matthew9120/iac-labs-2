@@ -43,5 +43,3 @@ jobs:
       run: poetry run task formatter
     - name: Security tests
       run: poetry run task security
-    - name: Run the application
-      run: poetry run task local
