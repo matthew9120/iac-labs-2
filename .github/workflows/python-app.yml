@@ -27,25 +27,28 @@ jobs:
       # uses: ClementWalter/poetry-action@845abd0cfcc6671c045a2f9df189360bb73e64c4
     - uses: ClementWalter/poetry-action@master
       with:
-        shell: bash
         os: ubuntu-latest
         python-version: "3.10"
-      shell: bash
     - name: Install dependencies
       run: |
         poetry install
+      shell: bash
     - name: Unit tests
       run:  |
         poetry run task test
+      shell: bash
     - name: Lint tests
       run: |
         poetry run task lint
+      shell: bash
     - name: Formatter tests
       run: |
         poetry run task formatter
+      shell: bash
     - name: Security tests
       run: |
         poetry run task security
+      shell: bash
 
   run:
   
@@ -55,3 +58,4 @@ jobs:
       - name: Run the application
         run: |
           poetry run task local
+        shell: bash
