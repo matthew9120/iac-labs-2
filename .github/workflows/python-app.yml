@@ -19,7 +19,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./example-app
+        working-directory: example-app
 
     steps:
     - uses: actions/checkout@v3
@@ -34,6 +34,7 @@ jobs:
       with:
         os: ubuntu-latest
         python-version: "3.10"
+        shell: bash
     - name: Install dependencies
       run: |
         poetry install
@@ -53,6 +54,10 @@ jobs:
   run:
   
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: example-app
 
     steps:
       - name: Run the application
