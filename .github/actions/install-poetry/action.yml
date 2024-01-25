@@ -17,9 +17,11 @@ runs:
         poetry config virtualenvs.create true
         poetry config virtualenvs.in-project false
         poetry config virtualenvs.path .virtualenvs
+      shell: bash
     - name: Poetry Version
       id: poetry-version
       run: echo "::set-output name=version::$(poetry --version | grep -oP '[\d\.]+')"
+      shell: bash
     - name: Cache Poetry virtualenv
       uses: actions/cache@v2
       id: cache
@@ -32,5 +34,6 @@ runs:
       working-directory: ./example-app
       run: |
         poetry install
+      shell: bash
       if: steps.cache.outputs.cache-hit != 'true'
 
