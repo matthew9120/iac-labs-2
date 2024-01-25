@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "main", "github-actions" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "github-actions" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -17,6 +17,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -25,37 +30,18 @@ jobs:
         python-version: "3.10"
       # You may pin to the exact commit or the version.
       # uses: ClementWalter/poetry-action@845abd0cfcc6671c045a2f9df189360bb73e64c4
-    - uses: ClementWalter/poetry-action@master
+      # modified
+    - uses: ./.github/actions/install-poetry
       with:
         os: ubuntu-latest
         python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        poetry install
-      shell: bash
     - name: Unit tests
-      run:  |
-        poetry run task test
-      shell: bash
+      run: poetry run task test
     - name: Lint tests
-      run: |
-        poetry run task lint
-      shell: bash
+      run: poetry run task lint
     - name: Formatter tests
-      run: |
-        poetry run task formatter
-      shell: bash
+      run: poetry run task formatter
     - name: Security tests
-      run: |
-        poetry run task security
-      shell: bash
-
-  run:
-  
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Run the application
-        run: |
-          poetry run task local
-        shell: bash
+      run: poetry run task security
+    - name: Run the application
+      run: poetry run task local
