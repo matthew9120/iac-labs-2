@@ -23,12 +23,6 @@ jobs:
         working-directory: ./example-app
 
     steps:
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
@@ -41,12 +35,22 @@ jobs:
       with:
         os: ubuntu-latest
         python-version: "3.10"
-
+      id: cached-poetry-dependencies
+    - name: Cache build venv
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/iac-labs-2/example-app/.venv
+        key: ${{ runner.os }}-venv
   lint:
 
     needs: build
 
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
 
     concurrency:
       group: static-tests
@@ -64,9 +68,14 @@ jobs:
 
   formatter:
 
+    needs: build
+
     runs-on: ubuntu-latest
 
-    needs: lint
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
 
     concurrency:
       group: static-tests
@@ -84,9 +93,9 @@ jobs:
 
   security:
 
-    runs-on: ubuntu-latest
+    needs: build
 
-    needs: formatter
+    runs-on: ubuntu-latest
 
     concurrency:
       group: static-tests
@@ -104,7 +113,7 @@ jobs:
 
   unittests:
 
-    needs: build
+    needs: [lint, formatter, security]
 
     runs-on: ubuntu-latest
 
