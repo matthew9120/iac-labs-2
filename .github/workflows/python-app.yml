@@ -47,23 +47,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./example-app
-
     concurrency:
       group: static-tests
 
     steps:
+    - name: Lint tests
+      run: poetry run task lint
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
         path: /home/runner/work/iac-labs-2/example-app/.venv
         key: ${{ runner.os }}-venv
-    - name: Lint tests
-      run: poetry run task lint
 
 
   formatter:
@@ -72,23 +67,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./example-app
-
     concurrency:
       group: static-tests
 
     steps:
+    - name: Formatter tests
+      run: poetry run task formatter
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
         path: /home/runner/work/iac-labs-2/example-app/.venv
         key: ${{ runner.os }}-venv
-    - name: Formatter tests
-      run: poetry run task formatter
 
 
   security:
@@ -101,14 +91,14 @@ jobs:
       group: static-tests
 
     steps:
+    - name: Security tests
+      run: poetry run task security
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
         path: /home/runner/work/iac-labs-2/example-app/.venv
         key: ${{ runner.os }}-venv
-    - name: Security tests
-      run: poetry run task security
 
 
   unittests:
@@ -118,11 +108,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Unit tests
+      run: poetry run task test
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
         path: /home/runner/work/iac-labs-2/example-app/.venv
         key: ${{ runner.os }}-venv
-    - name: Unit tests
-      run: poetry run task test
