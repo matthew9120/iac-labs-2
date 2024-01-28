@@ -22,18 +22,3 @@ runs:
       id: poetry-version
       run: echo "::set-output name=version::$(poetry --version | grep -oP '[\d\.]+')"
       shell: bash
-    - name: Cache Poetry virtualenv
-      uses: actions/cache@v2
-      id: cache
-      with:
-        path: .virtualenvs
-        key: ${{ inputs.os }}-${{ inputs.python-version }}-poetry-${{ steps.poetry-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
-        restore-keys: |
-          ${{ inputs.os }}-${{ inputs.python-version }}-poetry-${{ steps.poetry-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
-    - name: Install dependencies
-      working-directory: ./example-app
-      run: |
-        poetry install
-      shell: bash
-      if: steps.cache.outputs.cache-hit != 'true'
-
