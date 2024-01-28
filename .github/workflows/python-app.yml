@@ -35,70 +35,116 @@ jobs:
       with:
         os: ubuntu-latest
         python-version: "3.10"
-      id: cached-poetry-dependencies
-    - name: Cache build venv
-      uses: actions/cache@v3
+    - name: Install dependencies
+      run: poetry install
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v2
+      id: cache
       with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
+        path: example-app/.virtualenvs
+        key: poetry-deps
+
+
   lint:
 
     needs: build
 
-    runs-on: ubuntu-latest
-
     concurrency:
       group: static-tests
 
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+
     steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - uses: ./.github/actions/install-poetry
+      with:
+        os: ubuntu-latest
+        python-version: "3.10"
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: example-app/.virtualenvs
+        key: poetry-deps
     - name: Lint tests
       run: poetry run task lint
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
 
 
   formatter:
 
     needs: build
 
-    runs-on: ubuntu-latest
-
     concurrency:
       group: static-tests
 
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+
     steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - uses: ./.github/actions/install-poetry
+      with:
+        os: ubuntu-latest
+        python-version: "3.10"
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: example-app/.virtualenvs
+        key: poetry-deps
     - name: Formatter tests
       run: poetry run task formatter
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
 
 
   security:
 
     needs: build
 
-    runs-on: ubuntu-latest
-
     concurrency:
       group: static-tests
 
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+
     steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - uses: ./.github/actions/install-poetry
+      with:
+        os: ubuntu-latest
+        python-version: "3.10"
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: example-app/.virtualenvs
+        key: poetry-deps
     - name: Security tests
       run: poetry run task security
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
 
 
   unittests:
@@ -107,12 +153,26 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+
     steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - uses: ./.github/actions/install-poetry
+      with:
+        os: ubuntu-latest
+        python-version: "3.10"
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: example-app/.virtualenvs
+        key: poetry-deps
     - name: Unit tests
       run: poetry run task test
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs-2/example-app/.venv
-        key: ${{ runner.os }}-venv
