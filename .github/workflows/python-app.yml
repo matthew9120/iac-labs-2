@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "github-actions" ]
   pull_request:
     branches: [ "main" ]
 
@@ -15,11 +15,21 @@ permissions:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+
+
+    runs-on: ${{matrix.os}}
 
     defaults:
       run:
-        shell: bash
+        shell: ${{matrix.shell}}
         working-directory: ./example-app
 
     steps:
@@ -33,8 +43,7 @@ jobs:
       # modified
     - uses: ./.github/actions/install-poetry
       with:
-        os: ubuntu-latest
-        python-version: "3.10"
+        shell: ${{shell}}
     - name: Install dependencies
       run: poetry install
     - name: Cache Poetry virtualenv
@@ -52,11 +61,20 @@ jobs:
     concurrency:
       group: static-tests
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+
+    runs-on: ${{matrix.os}}
 
     defaults:
       run:
-        shell: bash
+        shell: ${{matrix.shell}}
         working-directory: ./example-app
 
     steps:
@@ -86,11 +104,20 @@ jobs:
     concurrency:
       group: static-tests
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+
+    runs-on: ${{matrix.os}}
 
     defaults:
       run:
-        shell: bash
+        shell: ${{matrix.shell}}
         working-directory: ./example-app
 
     steps:
@@ -120,11 +147,20 @@ jobs:
     concurrency:
       group: static-tests
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+
+    runs-on: ${{matrix.os}}
 
     defaults:
       run:
-        shell: bash
+        shell: ${{matrix.shell}}
         working-directory: ./example-app
 
     steps:
@@ -151,11 +187,20 @@ jobs:
 
     needs: [lint, formatter, security]
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+
+    runs-on: ${{matrix.os}}
 
     defaults:
       run:
-        shell: bash
+        shell: ${{matrix.shell}}
         working-directory: ./example-app
 
     steps:

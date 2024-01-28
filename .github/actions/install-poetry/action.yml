@@ -3,9 +3,7 @@
 name: Poetry setup
 description: Add poetry and install deps with cache
 inputs:
-  os:
-    required: true
-  python-version:
+  shell:
     required: true
 runs:
   using: "composite"
@@ -17,8 +15,4 @@ runs:
         poetry config virtualenvs.create true
         poetry config virtualenvs.in-project false
         poetry config virtualenvs.path .virtualenvs
-      shell: bash
-    - name: Poetry Version
-      id: poetry-version
-      run: echo "::set-output name=version::$(poetry --version | grep -oP '[\d\.]+')"
-      shell: bash
+      shell: ${{shell}}
