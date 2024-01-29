@@ -1,7 +1,0 @@
-# Modified https://github.com/actions-marketplace-validations/ClementWalter_poetry-action
-
-name: Poetry setup
-description: Add poetry and install deps with cache
-runs:
-  steps:
-
